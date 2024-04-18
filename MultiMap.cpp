@@ -5,13 +5,16 @@
 
 using namespace std;
 
-
+// BC = WC = TC = Th(1)
 MultiMap::MultiMap() {
     this->head = nullptr;
     this->numberOfPairs = 0;
 }
 
-
+/* WC = O(n)
+ * BC = Theta(1)
+ * TC = O(n)
+ */
 ArrayNode* findBeforeKeyValue(ArrayNode* head, TKey key, TValue value){
     ArrayNode* node = head;
     while (node != nullptr and node->next != nullptr)
@@ -23,6 +26,10 @@ ArrayNode* findBeforeKeyValue(ArrayNode* head, TKey key, TValue value){
     return nullptr;
 }
 
+/* WC = O(n)
+ * BC = Theta(1)
+ * TC = O(n)
+ */
 ArrayNode* findKeyValue(ArrayNode* head, TKey key, TValue value){
     ArrayNode* node = head;
     while (node != nullptr)
@@ -34,6 +41,10 @@ ArrayNode* findKeyValue(ArrayNode* head, TKey key, TValue value){
     return nullptr;
 }
 
+/* WC = O(n)
+ * BC = Theta(1)
+ * TC = O(n)
+ */
 ArrayNode* addNewElementInFront(ArrayNode* head, TKey key, TValue value){
     ArrayNode* newArrayNode = new ArrayNode;
     std::pair<TKey, TValue> key_value(key, value);
@@ -42,12 +53,16 @@ ArrayNode* addNewElementInFront(ArrayNode* head, TKey key, TValue value){
     return newArrayNode;
 }
 
+// WC = BC = TC = Theta(1)
 void MultiMap::add(TKey c, TValue v) {
     this->head = addNewElementInFront(this->head, c, v);
     this->numberOfPairs++;
 }
 
-
+/* WC = O(n)
+ * BC = Theta(1)
+ * TC = O(n)
+ */
 bool MultiMap::remove(TKey c, TValue v) {
     ArrayNode* nodeOfKey = findBeforeKeyValue(this->head, c, v);
     if (nodeOfKey != nullptr) {
@@ -75,7 +90,10 @@ bool MultiMap::remove(TKey c, TValue v) {
 	return false;
 }
 
-
+/* WC = O(n)
+ * BC = Theta(1)
+ * TC = O(n)
+ */
 vector<TValue> MultiMap::search(TKey c) const {
     vector<TValue> valueVector;
     ArrayNode* node = this->head;
@@ -88,11 +106,13 @@ vector<TValue> MultiMap::search(TKey c) const {
 }
 
 
+// WC = BC = TC = Theta(1)
 int MultiMap::size() const {
 	return this->numberOfPairs;
 }
 
 
+// WC = BC = TC = Theta(1)
 bool MultiMap::isEmpty() const {
     return this->numberOfPairs == 0;
 }
