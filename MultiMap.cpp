@@ -7,128 +7,84 @@ using namespace std;
 
 
 MultiMap::MultiMap() {
-    this->array = nullptr;
+    this->head = nullptr;
     this->numberOfPairs = 0;
 }
 
 
-ElementNode* findLatestElementNode(ElementNode* head){
-    ElementNode* node = head;
-    while(node->next != nullptr)
-        node = node->next;
-    return node;
-}
-
-ElementNode* findNodeBeforeValue(ElementNode* head, TValue value) {
-    ElementNode* node = head;
-    if (node == nullptr)
-        return nullptr;
-    while(node->next != nullptr){
-        if (node->next->value == value)
+ArrayNode* findBeforeKeyValue(ArrayNode* head, TKey key, TValue value){
+    ArrayNode* node = head;
+    while (node != nullptr and node->next != nullptr)
+    {
+        if (node->next->key_value.first == key && node->next->key_value.second == value)
             return node;
         node = node->next;
     }
     return nullptr;
 }
 
-ArrayNode* findKey(ArrayNode* head, TKey key){
-
+ArrayNode* findKeyValue(ArrayNode* head, TKey key, TValue value){
     ArrayNode* node = head;
     while (node != nullptr)
     {
-        if (node->key_value.first == key)
+        if (node->key_value.first == key && node->key_value.second == value)
             return node;
         node = node->next;
     }
     return nullptr;
 }
 
-ArrayNode* addNewElementInFront(ArrayNode* head, TKey key){
-
+ArrayNode* addNewElementInFront(ArrayNode* head, TKey key, TValue value){
     ArrayNode* newArrayNode = new ArrayNode;
-    std::pair<TKey, ElementNode*> key_value(key, nullptr);
+    std::pair<TKey, TValue> key_value(key, value);
     newArrayNode->key_value = key_value;
     newArrayNode->next = head;
     return newArrayNode;
 }
 
 void MultiMap::add(TKey c, TValue v) {
-    if (this->array == nullptr) {
-        ElementNode* newNode = new ElementNode;
-        newNode->value = v;
-        newNode->next = nullptr;
-
-        ArrayNode* newKeyNode = new ArrayNode;
-        std::pair<TKey, ElementNode*> key_value(c, newNode);
-        newKeyNode->key_value = key_value;
-        newKeyNode->next = nullptr;
-
-        this->array = newKeyNode;
-        this->numberOfPairs++;
-        return;
-    }
-
-    ArrayNode* nodeOfKey = findKey(this->array, c);
-
-    ElementNode* newNode;
-    newNode->value = v;
-    newNode->next = nullptr;
-
-    if (nodeOfKey == nullptr) {
-        this->array = addNewElementInFront(this->array, c);
-        nodeOfKey = this->array;
-    }
-
-    if (nodeOfKey->key_value.second == nullptr){
-        std::pair<TKey, ElementNode*> key_value(c, newNode);
-        nodeOfKey->key_value = key_value;
-    }
-    else{
-        ElementNode* lastNode = findLatestElementNode(nodeOfKey->key_value.second);
-        lastNode->next = newNode;
-    }
+    this->head = addNewElementInFront(this->head, c, v);
     this->numberOfPairs++;
-
-
 }
 
 
 bool MultiMap::remove(TKey c, TValue v) {
-    ArrayNode* nodeOfKey = findKey(this->array, c);
-
-    if (nodeOfKey != nullptr and nodeOfKey->key_value.second != nullptr){
-        ElementNode* lastNode = findNodeBeforeValue(nodeOfKey->key_value.second, v);
-        if (lastNode != nullptr) {
-            ElementNode *nodeToRemove = lastNode->next; // TODO might need to return
-            if (nodeToRemove == nodeOfKey->key_value.second)
-                nodeOfKey->key_value.second = nullptr;
-            else
-                lastNode->next = nodeToRemove->next;
-            delete (nodeOfKey);
-        }
-        else if(nodeOfKey->key_value.second->value == c){
-            ElementNode* nodeToRemove = nodeOfKey->key_value.second; // TODO might need to return
-            nodeOfKey->key_value.second = nullptr;
-            delete (nodeToRemove);
-        }
+    ArrayNode* nodeOfKey = findBeforeKeyValue(this->head, c, v);
+    if (nodeOfKey != nullptr) {
+        ArrayNode* nodeToRemove = nodeOfKey->next;
+        nodeOfKey->next = nodeToRemove->next;
+        delete nodeToRemove;
         this->numberOfPairs--;
         return true;
     }
-	return  false;
+    else if (this->head != nullptr and this->head->key_value.first == c and this->head->key_value.second == v){
+        if (this->head->next == nullptr) {
+            delete this->head;
+            this->head = nullptr;
+            this->numberOfPairs--;
+            return true;
+        }
+        else{
+            ArrayNode* nextNode = this->head->next;
+            delete this->head;
+            this->head = nextNode;
+            this->numberOfPairs--;
+            return true;
+        }
+    }
+	return false;
 }
 
 
 vector<TValue> MultiMap::search(TKey c) const {
     vector<TValue> valueVector;
-    ArrayNode* nodeOfKey = findKey(this->array, c);
-    if (nodeOfKey != nullptr and nodeOfKey->key_value.second != nullptr){
-        ElementNode* node = nodeOfKey->key_value.second;
-        while (node != nullptr){
-            valueVector.push_back(node->value);
-            node = node->next;
-        }
+    ArrayNode* node = this->head;
+    while (node != nullptr) {
+        if (node->key_value.first == c)
+            valueVector.push_back(node->key_value.second);
+        node = node->next;
     }
-	return valueVector;
+    return valueVector;
 }
 
 

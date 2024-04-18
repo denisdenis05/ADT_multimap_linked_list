@@ -19,7 +19,7 @@ struct ElementNode{
 };
 
 typedef struct ArrayNode{
-    std::pair<TKey , ElementNode*> key_value;
+    std::pair<TKey , TValue> key_value;
     struct ArrayNode* next;
 };
 
@@ -29,7 +29,7 @@ class MultiMap
 	friend class MultiMapIterator;
 
 private:
-    ArrayNode* array;
+    ArrayNode* head;
     int numberOfPairs;
 
 public:

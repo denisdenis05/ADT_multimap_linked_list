@@ -9,8 +9,7 @@ class MultiMapIterator
 
 private:
 	const MultiMap& col;
-    ArrayNode* currentKeyNode;
-    ElementNode* currentElementNode;
+    ArrayNode* current;
 
 	//DO NOT CHANGE THIS PART
 	MultiMapIterator(const MultiMap& c);

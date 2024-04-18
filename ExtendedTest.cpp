@@ -11,19 +11,13 @@
 using namespace std;
 
 void testIteratorSteps(MultiMap& mm) {
-    int count = 0;
-    MultiMapIterator mmit = mm.iterator();
-    while (mmit.valid()) {
-        // Print the current key-value pair
-        TElem current = mmit.getCurrent();
-        cout << "Current: " << current.first << ", " << current.second << endl;
-
-        count++;
-        mmit.next();
-    }
-    cout << "Total elements counted by iterator: " << count << endl;
-    cout << "Size of MultiMap: " << mm.size() << endl;
-    assert(count == mm.size());
+	int count = 0;
+	MultiMapIterator mmit = mm.iterator();
+	while (mmit.valid()) {
+		count++;
+		mmit.next();
+	}
+	assert(count == mm.size());
 }
 
 void testCreate() {
@@ -368,6 +362,6 @@ void testAllExtended() {
 	testCreate();
 	testAdd();
 	testRemove();
-//    testIterator();
-//	testQuantity();
+    testIterator();
+	testQuantity();
 }

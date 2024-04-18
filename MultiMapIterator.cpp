@@ -1,46 +1,33 @@
+#include <stdexcept>
 #include "MultiMapIterator.h"
 #include "MultiMap.h"
 
 
 MultiMapIterator::MultiMapIterator(const MultiMap& c): col(c) {
-    currentKeyNode = col.array;
-    if (currentKeyNode != nullptr)
-        currentElementNode = currentKeyNode->key_value.second;
-    else
-        currentElementNode = nullptr;
+    current = col.head;
 }
 
 TElem MultiMapIterator::getCurrent() const{
     if (valid()) {
-        return std::make_pair(currentKeyNode->key_value.first, currentElementNode->value);
+        return current->key_value;
     }
-    return NULL_TELEM;
+    throw std::runtime_error("Iterator not valid (getCurrent)");
 }
 
 bool MultiMapIterator::valid() const {
-    return currentKeyNode != nullptr && currentElementNode != nullptr;
+    return current != nullptr;
+
 }
 
 void MultiMapIterator::next() {
-    if (currentElementNode->next != nullptr) {
-        currentElementNode = currentElementNode->next;
+    if (current != nullptr) {
+        current = current->next;
     } else {
-        currentKeyNode = currentKeyNode->next;
-        while (currentKeyNode != nullptr and currentKeyNode->key_value.second == nullptr)
-            currentKeyNode = currentKeyNode->next;
-
-        if (currentKeyNode != nullptr)
-            currentElementNode = currentKeyNode->key_value.second;
-        else
-            currentElementNode = nullptr;
+        throw std::runtime_error("Iterator end");
     }
 }
 
 void MultiMapIterator::first() {
-    currentKeyNode = col.array;
-    if (currentKeyNode != nullptr)
-        currentElementNode = currentKeyNode->key_value.second;
-    else
-        currentElementNode = nullptr;
+    current = col.head;
 }
 
