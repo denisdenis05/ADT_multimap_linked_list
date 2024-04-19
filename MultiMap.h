@@ -29,7 +29,7 @@ class MultiMap
 	friend class MultiMapIterator;
 
 private:
-    ArrayNode* array;
+    ArrayNode* head;
     int numberOfPairs;
 
 public:
@@ -54,6 +54,8 @@ public:
 
 	//returns an iterator for the multimap
 	MultiMapIterator iterator() const;
+
+    int updateValues(MultiMap& m);
 
 	//descturctor
 	~MultiMap();

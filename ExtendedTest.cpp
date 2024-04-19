@@ -14,15 +14,11 @@ void testIteratorSteps(MultiMap& mm) {
     int count = 0;
     MultiMapIterator mmit = mm.iterator();
     while (mmit.valid()) {
-        // Print the current key-value pair
         TElem current = mmit.getCurrent();
-        cout << "Current: " << current.first << ", " << current.second << endl;
 
         count++;
         mmit.next();
     }
-    cout << "Total elements counted by iterator: " << count << endl;
-    cout << "Size of MultiMap: " << mm.size() << endl;
     assert(count == mm.size());
 }
 
@@ -64,7 +60,7 @@ void testAdd() {
 	}
 	assert(m.isEmpty() == false);
 	assert(m.size() == 240);
-	for (int i = -200; i < 200; i++) { 
+	for (int i = -200; i < 200; i++) {
 		vector<TValue> v;
 		if (i < -100) {
             v=m.search(i);
@@ -96,7 +92,7 @@ void testAdd() {
 		}
 	}
 	testIteratorSteps(m);
-	for (int i = 10000; i > -10000; i--) { 
+	for (int i = 10000; i > -10000; i--) {
 		m.add(i, 4*i);
 	}
 	assert(m.size()==20240);
@@ -106,14 +102,14 @@ void testAdd() {
 void testRemove() {
 	cout << "Test remove" << endl;
 	MultiMap m;
-	for (int i = -100; i < 100; i++) { 
+	for (int i = -100; i < 100; i++) {
 		assert(m.remove(i, i) == false);
 	}
 	assert(m.size() == 0);
-	for (int i = -100; i < 100; i = i + 2) { 
+	for (int i = -100; i < 100; i = i + 2) {
 		m.add(i, i);
 	}
-	for (int i = -100; i < 100; i++) { 
+	for (int i = -100; i < 100; i++) {
 
 		if (i % 2 == 0) {
 			assert(m.remove(i, i) == true);
@@ -127,12 +123,12 @@ void testRemove() {
 	assert(m.size() == 0);
 
 	for(int i = 0; i <= 100; i++)
-        m.add(0, i);    
+        m.add(0, i);
     m.add(1, 100);
 	testIteratorSteps(m);
     for(int i = 0; i <= 100; i++)
         assert(m.remove(0, i) == true);
-    
+
     vector<TValue> v;
 	v=m.search(1);
     assert(v.size()==1 && v.at(0)==100);
@@ -141,14 +137,14 @@ void testRemove() {
     MultiMapIterator it=m.iterator();
     it.next();
     assert(it.valid()==false);
-    
+
     assert(m.remove(1,100)==true);
-    
+
     assert(m.size()==0);
-	for (int i = -100; i <= 100; i = i + 2) { 
+	for (int i = -100; i <= 100; i = i + 2) {
 		m.add(i, 2*i);
 	}
-	for (int i = 100; i > -100; i--) { 
+	for (int i = 100; i > -100; i--) {
 		if (i % 2 == 0) {
   			assert(m.remove(i, 3*i+1) == false);
 			assert(m.remove(i, 2*i) == true);
@@ -161,7 +157,7 @@ void testRemove() {
 	assert(m.size() == 1);
 	bool b = m.remove(-100, -200);
 	assert(b==true);
-	for (int i = -100; i < 100; i++) { 
+	for (int i = -100; i < 100; i++) {
 	  if(i!=0){
 		m.add(i, i+1);
 		m.add(i, 2*i+1);
@@ -178,7 +174,7 @@ void testRemove() {
 			assert(v.size() == 5);
 		}
 	}
-	for (int i = -100; i < 100; i++) { 
+	for (int i = -100; i < 100; i++) {
 	  if (i!=0)
 		assert(m.remove(i,i+1) == true);
 	}
@@ -190,7 +186,7 @@ void testRemove() {
 			assert(v.size() == 4);
 		}
 	}
-	for (int i = -200; i < 200; i++) { 
+	for (int i = -200; i < 200; i++) {
 		if (i < -100 || i >= 100) {
 			assert(m.remove(i, i) == false);
 			assert(m.remove(i, i) == false);
@@ -214,7 +210,7 @@ void testRemove() {
 	}
 	int min = -200;
 	int max = 200;
-	while (min < max) { 
+	while (min < max) {
 		m.add(min, min);
 		m.add(max, max);
 		min++;
@@ -223,7 +219,7 @@ void testRemove() {
 	m.add(0, 100);
 	m.add(0, 200);
 	assert(m.size() == 402);
-	for (int i = -30; i < 30; i++) { 
+	for (int i = -30; i < 30; i++) {
         v=m.search(i);
 		if (i==0) assert(v.size() == 2);
 		  else assert(v.size() == 1);
@@ -368,6 +364,6 @@ void testAllExtended() {
 	testCreate();
 	testAdd();
 	testRemove();
-//    testIterator();
-//	testQuantity();
+    testIterator();
+	testQuantity();
 }

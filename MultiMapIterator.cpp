@@ -1,9 +1,10 @@
+#include <stdexcept>
 #include "MultiMapIterator.h"
 #include "MultiMap.h"
 
 
 MultiMapIterator::MultiMapIterator(const MultiMap& c): col(c) {
-    currentKeyNode = col.array;
+    currentKeyNode = col.head;
     if (currentKeyNode != nullptr)
         currentElementNode = currentKeyNode->key_value.second;
     else
@@ -14,7 +15,7 @@ TElem MultiMapIterator::getCurrent() const{
     if (valid()) {
         return std::make_pair(currentKeyNode->key_value.first, currentElementNode->value);
     }
-    return NULL_TELEM;
+    throw std::exception();
 }
 
 bool MultiMapIterator::valid() const {
@@ -22,9 +23,11 @@ bool MultiMapIterator::valid() const {
 }
 
 void MultiMapIterator::next() {
+    if (currentKeyNode == nullptr)
+        throw std::exception();
     if (currentElementNode->next != nullptr) {
         currentElementNode = currentElementNode->next;
-    } else {
+    } else{
         currentKeyNode = currentKeyNode->next;
         while (currentKeyNode != nullptr and currentKeyNode->key_value.second == nullptr)
             currentKeyNode = currentKeyNode->next;
@@ -34,10 +37,12 @@ void MultiMapIterator::next() {
         else
             currentElementNode = nullptr;
     }
+
+
 }
 
 void MultiMapIterator::first() {
-    currentKeyNode = col.array;
+    currentKeyNode = col.head;
     if (currentKeyNode != nullptr)
         currentElementNode = currentKeyNode->key_value.second;
     else
